@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather & Air Quality</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background: url('https://wallpapers.com/images/featured/clouds-6swlqte8g6dniemk.jpg') no-repeat center center fixed;
+            background-size: cover;
+            color: #fff;
+            padding: 20px;
+            margin: 0;
+            height: 100vh;
+            position: relative;
+        }
+
+        #clock {
+            font-size: 24px;
+            color: #fff;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            margin-top: 20px;
+        }
+
+        input {
+            padding: 8px;
+            width: 100%;
+            box-sizing: border-box;
+            margin-bottom: 10px;
+            background-color: black;
+            color: #fff;
+            border: none;
+        }
+
+        #result-container {
+            margin-top: 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .result-card {
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            text-align: left;
+            font-size: 20px;
+            color: #fff;
+        }
+
+        h1 {
+            color: #180404;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-size: 24px;
+            color: black;
+        }
+
+        button {
+            background-color: #3498db;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+        }
+
+        #result {
+            color: #180404;
+        }
+
+        location {
+            background-color: #180404;
+        }
+
+        #search-suggestions {
+            position: relative;
+            width: 100%;
+            margin-top: 5px;
+            background-color: #000;
+            border-radius: 5px;
+            display: none;
+            color: #fff;
+        }
+
+        .suggestion-item {
+            padding: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .suggestion-item:hover {
+            background-color: #333;
+        }
+
+        #location-counter {
+            font-size: 18px;
+            color: #fff;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Weather & Air Quality</h1>
+    <label for="location" style="font-size: 24px; color: black;">Enter city or state:</label>
+    <input type="text" id="location" placeholder="e.g., Delhi, Maharashtra" oninput="showSuggestions()" onkeydown="handleEnter(event)">
+    <div id="search-suggestions"></div>
+    <button onclick="getWeatherAndAirQuality()">Get Data</button>
+
+    <div id="result-container"></div>
+
+    <div id="location-counter">Number of Locations Identified: <span id="counter">0</span></div>
+
+    <div id="clock"></div>
+
+    <script>
+        let locationCounter = 0;
+
+        function showSuggestions() {
+            const locationInput = document.getElementById('location');
+            const searchSuggestions = document.getElementById('search-suggestions');
+
+            const searchTerm = locationInput.value.trim();
+
+            if (searchTerm.length === 0) {
+                searchSuggestions.innerHTML = '';
+                searchSuggestions.style.display = 'none';
+                return;
+            }
+
+            const weatherAPIKey = 'f8102c3d607f6c1faca1debc59a9ee69';
+
+            fetch(`https://api.openweathermap.org/geo/1.0/direct?q=${searchTerm}&limit=5&appid=${weatherAPIKey}`)
+                .then(response => response.json())
+                .then(data => {
+                    const suggestions = data;
+
+                    if (suggestions.length > 0) {
+                        const suggestionHTML = suggestions.map(item => {
+                            return `<div class="suggestion-item" onclick="selectSuggestion('${item.name}, ${item.country}')">${item.name}, ${item.country}</div>`;
+                        }).join('');
+
+                        searchSuggestions.innerHTML = suggestionHTML;
+                        searchSuggestions.style.display = 'block';
+                    } else {
+                        searchSuggestions.innerHTML = '<div class="suggestion-item">No suggestions found</div>';
+                        searchSuggestions.style.display = 'block';
+                    }
+                })
+                .catch(error => console.error('Error fetching search suggestions:', error));
+        }
+
+        function handleEnter(event) {
+            if (event.key === 'Enter') {
+                getWeatherAndAirQuality();
+            }
+        }
+
+        function selectSuggestion(selectedValue) {
+            document.getElementById('location').value = selectedValue;
+            document.getElementById('search-suggestions').style.display = 'none';
+        }
+
+        function getWeatherAndAirQuality() {
+            const location = document.getElementById('location').value;
+
+            const weatherAPIKey = 'f8102c3d607f6c1faca1debc59a9ee69';
+
+            fetch(`https://api.openweathermap.org/data/2.5/weather?q=${location}&appid=${weatherAPIKey}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Invalid location. Please enter a correct city or state.');
+                    }
+                    return response.json();
+                })
+                .then(weatherData => {
+                    const temperature = (weatherData.main.temp - 273.15).toFixed(2);
+                    const weatherDescription = weatherData.weather[0].description;
+
+                    fetch(`https://api.openweathermap.org/data/2.5/air_pollution?lat=${weatherData.coord.lat}&lon=${weatherData.coord.lon}&appid=${weatherAPIKey}`)
+                        .then(response => response.json())
+                        .then(airQualityData => {
+                            const airQualityIndex = airQualityData.list[0].main.aqi;
+                            const cityName = weatherData.name;
+                            const cityTimezone = weatherData.timezone;
+
+                            displayResult(temperature, weatherDescription, airQualityIndex, cityName, cityTimezone);
+                            updateLocationCounter();
+                            showCityTime(cityTimezone);
+                        })
+                        .catch(error => console.error('Error fetching air quality data:', error));
+                })
+                .catch(error => {
+                    alert(error.message);
+                });
+        }
+
+        function displayResult(temperature, weatherDescription, airQualityIndex, cityName, cityTimezone) {
+            const resultContainer = document.getElementById('result-container');
+            const resultCard = document.createElement('div');
+            resultCard.classList.add('result-card');
+            resultCard.innerHTML = `
+                <p><strong>City:</strong> ${cityName}</p>
+                <p><strong>Temperature:</strong> ${temperature}°C</p>
+                <p><strong>Weather:</strong> ${weatherDescription}</p>
+                <p><strong>Air Quality Index:</strong> ${airQualityIndex * 100} (Approx)</p>
+                <p><strong>City Time:</strong> <span id="city-time"></span></p>
+            `;
+
+            resultContainer.innerHTML = '';
+            resultContainer.appendChild(resultCard);
+        }
+
+        function updateLocationCounter() {
+            locationCounter++;
+            document.getElementById('counter').innerText = locationCounter;
+        }
+
+        // Clock
+        function updateClock() {
+            const clockElement = document.getElementById('clock');
+            const currentTime = new Date();
+            const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+            const currentDay = days[currentTime.getDay()];
+            const hours = currentTime.getHours(); // Assuming the server returns the time in UTC
+            const minutes = currentTime.getMinutes();
+            const seconds = currentTime.getSeconds();
+
+            const formattedTime = `${currentDay}, ${formatTimeComponent(hours)}:${formatTimeComponent(minutes)}:${formatTimeComponent(seconds)}`;
+            clockElement.textContent = formattedTime;
+        }
+
+        function formatTimeComponent(timeComponent) {
+            return timeComponent < 10 ? `0${timeComponent}` : timeComponent;
+        }
+
+        function showCityTime(cityTimezone) {
+            const cityTimeElement = document.getElementById('city-time');
+            const currentTime = new Date();
+            const cityTime = new Date(currentTime.toLocaleString('en-US', { timeZone: cityTimezone }));
+
+            const hours = cityTime.getHours();
+            const minutes = cityTime.getMinutes();
+            const seconds = cityTime.getSeconds();
+
+            const formattedTime = `${formatTimeComponent(hours)}:${formatTimeComponent(minutes)}:${formatTimeComponent(seconds)}`;
+            cityTimeElement.textContent = formattedTime;
+        }
+
+        // Update clock every second
+        setInterval(updateClock, 1000);
+    </script>
+</body>
+
+</html>
