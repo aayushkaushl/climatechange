@@ -103,12 +103,43 @@
     #options-container button.selected {
       background-color: #1b1c1c;
     }
+    body {
+      font-family: 'Arial', sans-serif;
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      background-color: #f4f4f4;
+      text-align: center;
+    }
+
+    #quiz-container {
+      position: relative;
+      max-width: 600px;
+      margin: 20px auto;
+      background-color: #fff;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    #timer-container {
+      position: relative;
+      margin-bottom: 50px; /* Adjust as needed to create space between timer and questions */
+    }
+
+    #timer {
+      font-size: 18px;
+      color: #081118;
+      margin: 10px 0;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
   </style>
 </head>
 
 <body>
-
-  <div id="timer"> Time Left: 05:00</div>
 
   <div id="instructions-container">
     <h1>Instructions</h1>
@@ -127,6 +158,9 @@
 
   <div id="quiz-container" style="display: none;">
     <h1>Climate Quiz</h1>
+    <div id="timer-container">
+    <div id="timer"></div>
+    </div>
     <p id="question">Loading Question...</p>
     <div id="options-container"></div>
     <div>
@@ -142,6 +176,7 @@
       <div id="score-chart">
         <canvas id="score-pie-chart"></canvas>
       </div>
+      <div id="attempted-questions"></div>
       <button class="play-again" onclick="resetQuiz()">Play Again</button>
     </div>
   </div>
@@ -303,13 +338,13 @@
     const timerElement = document.getElementById("timer");
 
     function startTimer(duration) {
-      // (Your existing timer code)
-let timeLeft = duration;
+      let timeLeft = duration;
+
       timer = setInterval(function () {
         const minutes = Math.floor(timeLeft / 60);
         const seconds = timeLeft % 60;
 
-        timerElement.textContent = `${minutes}:${seconds}`;
+        timerElement.textContent = ` Time Left: ${minutes}:${seconds}`;
 
         if (timeLeft <= 0) {
           clearInterval(timer);
@@ -319,10 +354,11 @@ let timeLeft = duration;
         timeLeft--;
       }, 1000);
     }
+
     function startQuiz() {
       const instructionsContainer = document.getElementById("instructions-container");
       const quizContainer = document.getElementById("quiz-container");
-      const quizDuration = 300; // 5 minutes in seconds
+      const quizDuration = 60; // 5 minutes in seconds
 
       instructionsContainer.style.display = "none";
       quizContainer.style.display = "block";
@@ -382,6 +418,7 @@ let timeLeft = duration;
       nextButton.style.display = currentQuestionIndex < 9 ? "inline-block" : "none"; // Updated to display 10 questions
       scoreButton.style.display = currentQuestionIndex === 9 ? "inline-block" : "none"; // Updated to display 10 questions
     }
+    
 
     function selectOption(selectedIndex) {
       userAnswers[currentQuestionIndex] = selectedIndex;
@@ -411,34 +448,46 @@ let timeLeft = duration;
     }
 
     function showScore() {
-      const resultContainer = document.getElementById("result-container");
-      const resultStats = document.getElementById("result-stats");
-      const scoreChart = document.getElementById("score-pie-chart");
+  const resultContainer = document.getElementById("result-container");
+  const resultStats = document.getElementById("result-stats");
+  const scoreChart = document.getElementById("score-pie-chart");
+  const attemptedQuestionsContainer = document.getElementById("attempted-questions");
 
-      resultContainer.style.display = "block";
+  resultContainer.style.display = "block";
 
-      endTime = new Date();
-      calculateScore();
+  endTime = new Date();
+  calculateScore();
 
-      const durationInSeconds = (endTime - startTime) / 1000;
-      resultStats.textContent = `You completed the quiz in ${durationInSeconds.toFixed(2)} seconds. Your score is ${score} out of 10.`;
+  const durationInSeconds = (endTime - startTime) / 1000;
+  resultStats.textContent = `You completed the quiz in ${durationInSeconds.toFixed(2)} seconds. Your score is ${score} out of 10.`;
 
-      const ctx = scoreChart.getContext('2d');
-      new Chart(ctx, {
-        type: 'doughnut',
-        data: {
-          labels: ['Correct', 'Incorrect'],
-          datasets: [{
-            data: [score, 10 - score], // Updated to match the subset size
-            backgroundColor: ['#2ecc71', '#e74c3c'],
-            borderColor: ['#2ecc71', '#e74c3c'],
-            borderWidth: 1
-          }]
-        }
-      });
+  // Display questions attempted
+  attemptedQuestionsContainer.innerHTML = "<h3>Questions Attempted:</h3>";
 
-      stopTimer();
+  for (let i = 0; i < 10; i++) { // Updated to match the subset size
+    const questionNumber = i + 1;
+    const attemptedQuestion = document.createElement("p");
+    attemptedQuestion.textContent = `Question ${questionNumber}: ${userAnswers[i] !== null ? "Attempted" : "Skipped"}`;
+    attemptedQuestionsContainer.appendChild(attemptedQuestion);
+  }
+
+  const ctx = scoreChart.getContext('2d');
+  new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+      labels: ['Correct', 'Incorrect'],
+      datasets: [{
+        data: [score, 10 - score], // Updated to match the subset size
+        backgroundColor: ['#2ecc71', '#e74c3c'],
+        borderColor: ['#2ecc71', '#e74c3c'],
+        borderWidth: 1
+      }]
     }
+  });
+
+  stopTimer();
+}
+
 
     function nextQuestion() {
       if (currentQuestionIndex < 9) { // Updated to display 10 questions
