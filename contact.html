@@ -6,97 +6,108 @@
   <title>Contact Support</title>
   <style>
     body {
-      font-family: 'Arial', sans-serif;
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      background-color: #f4f4f4;
-      color: #333;
-      transition: background-color 0.5s ease;
-    }
+      body {
+  font-family: 'Arial', sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  background-color: #f4f4f4;
+  color: #333;
+  transition: background-color 0.5s ease;
+}
 
-    header {
-      background-color: #3498db;
-      color: #ecf0f1;
-      padding: 1em;
-      text-align: center;
-    }
+header {
+  background-color: #3498db;
+  color: #ecf0f1;
+  padding: 1em;
+  text-align: center;
+}
 
-    main {
-      display: flex;
-      justify-content: space-around;
-      align-items: flex-start;
-      padding: 20px;
-      gap: 20px;
-    }
+main {
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-start;
+  padding: 20px;
+  gap: 20px;
+}
 
-    section {
-      flex: 1;
-      background-color: #e9dee3;
-      border-radius: 10px;
-      overflow: hidden;
-      transition: transform 0.5s ease, box-shadow 0.5s ease;
-    }
+section {
+  flex: 1;
+  background-color: #e9dee3;
+  border-radius: 10px;
+  overflow: hidden;
+  transition: transform 0.5s ease, box-shadow 0.5s ease;
+}
 
-    section:hover {
-      transform: scale(1.05);
-      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-    }
+section:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
 
-    h2 {
-      color: #e7a6f3;
-    }
+h2 {
+  color: #e7a6f3;
+}
 
-    .contact-details {
-      padding: 20px;
-    }
+.contact-details {
+  padding: 20px;
+}
 
-    .person {
-      display: flex;
-      align-items: center;
-      margin-bottom: 20px;
-    }
+.person {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
 
-    .person img {
-      border-radius: 50%;
-      margin-right: 15px;
-      width: 50px;
-      height: 50px;
-      object-fit: cover;
-    }
+.person img {
+  border-radius: 50%;
+  margin-right: 15px;
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+}
 
-    .contact-icon {
-      font-size: 24px;
-      margin-right: 8px;
-    }
+.contact-icon {
+  font-size: 24px;
+  margin-right: 8px;
+}
 
-    footer {
-      text-align: center;
-      padding: 1em;
-      background-color: #3498db;
-      color: #ecf0f1;
-    }
+footer {
+  text-align: center;
+  padding: 1em;
+  background-color: #3498db;
+  color: #ecf0f1;
+}
 
-    .faq {
-      background-color: #f9f9f9;
-      padding: 20px;
-      margin-top: 20px;
-      border-radius: 10px;
-    }
+.faq,
+.feedback-form,
+.security-info {
+  background-color: #f9f9f9;
+  padding: 20px;
+  margin-top: 20px;
+  border-radius: 10px;
+}
 
-    .feedback-form {
-      background-color: #f9f9f9;
-      padding: 20px;
-      margin-top: 20px;
-      border-radius: 10px;
-    }
+@media only screen and (max-width: 768px) {
+  main {
+    flex-direction: column;
+  }
 
-    .security-info {
-      background-color: #f9f9f9;
-      padding: 20px;
-      margin-top: 20px;
-      border-radius: 10px;
-    }
+  section {
+    margin-bottom: 20px;
+  }
+}
+
+@media only screen and (max-width: 480px) {
+  .person img {
+    width: 40px;
+    height: 40px;
+  }
+
+  .contact-details {
+    padding: 10px;
+  }
+}
+
   </style>
 </head>
 <body>
