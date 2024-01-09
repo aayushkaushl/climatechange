@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Climate Quiz Game</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      background-color: #f4f4f4;
+      text-align: center;
+    }
+
+    #timer {
+      font-size: 18px;
+      color: #3498db;
+      margin: 10px 0;
+    }
+
+    #instructions-container,
+    #quiz-container,
+    #result-container {
+      max-width: 600px;
+      margin: 20px auto;
+      background-color: #fff;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    #quiz-container,
+    #result-container {
+      display: none;
+    }
+
+    h1 {
+      color: #3498db;
+    }
+
+    p {
+      margin: 10px 0;
+    }
+
+    button {
+      padding: 8px 15px;
+      font-size: 14px;
+      cursor: pointer;
+      background-color: #3498db;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      margin-top: 10px;
+      box-sizing: border-box;
+    }
+
+    button:hover {
+      background-color: #2980b9;
+    }
+
+    button.play-again {
+      background-color: #2ecc71;
+    }
+
+    button.play-again:hover {
+      background-color: #27ae60;
+    }
+
+    #result-container {
+      margin-top: 20px;
+      width: 100%;
+    }
+
+    #score-chart {
+      width: 80%;
+      max-width: 400px;
+      margin: 20px auto;
+      background-color: #ecf0f1;
+      border-radius: 10px;
+      padding: 20px;
+    }
+
+    #options-container {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+
+    #options-container button {
+      display: block;
+      width: 100%;
+      background-color: #3498db;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      padding: 10px;
+      box-sizing: border-box;
+    }
+
+    #options-container button.selected {
+      background-color: #1b1c1c;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div id="timer"> Time Left: 05:00</div>
+
+  <div id="instructions-container">
+    <h1>Instructions</h1>
+    <p>Welcome to the Climate Quiz! Test your knowledge about climate and the environment with this quiz. Here are some instructions:</p>
+    <ul>
+      <li>Read each question carefully before selecting an answer.</li>
+      <li>Options for each question will be displayed in a 2x2 grid.</li>
+      <li>Click the "Next Question" button to move to the next question.</li>
+      <li>Use "Previous Question" to go back and modify your answer.</li>
+      <li>Click the "Reset Answer" button to clear your current answer for the current question.</li>
+      <li>After answering all questions, click the "Get Score" button to see your result.</li>
+      <li>Enjoy the quiz and good luck!</li>
+    </ul>
+    <button onclick="startQuiz()">Start Quiz</button>
+  </div>
+
+  <div id="quiz-container" style="display: none;">
+    <h1>Climate Quiz</h1>
+    <p id="question">Loading Question...</p>
+    <div id="options-container"></div>
+    <div>
+      <button id="prev-btn" onclick="previousQuestion()">Prev</button>
+      <button id="reset-btn" onclick="resetAnswer()">Reset</button>
+      <button id="next-btn" onclick="nextQuestion()">Next</button>
+    </div>
+    <button class="play-again" id="score-btn" onclick="showScore()">Get Score</button>
+
+    <div id="result-container">
+      <h2>Quiz Result</h2>
+      <p id="result-stats"></p>
+      <div id="score-chart">
+        <canvas id="score-pie-chart"></canvas>
+      </div>
+      <button class="play-again" onclick="resetQuiz()">Play Again</button>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    let questions = [
+{
+        question: "What is the main greenhouse gas emitted from landfills?",
+        options: ["Carbon Dioxide", "Methane", "Nitrous Oxide", "Water Vapor"],
+        correctAnswer: "Methane"
+      },
+      {
+        question: "Which of the following is a major cause of coral reef destruction?",
+        options: ["Ocean acidification", "Deforestation", "Air pollution", "Oil spills"],
+        correctAnswer: "Oil spills"
+      },
+      {
+        question: "What is the largest ocean on Earth?",
+        options: ["Atlantic Ocean", "Indian Ocean", "Southern Ocean", "Pacific Ocean"],
+        correctAnswer: "Pacific Ocean"
+      },
+      {
+        question: "Which gas makes up the majority of Earth's atmosphere?",
+        options: ["Oxygen", "Carbon Dioxide", "Nitrogen", "Hydrogen"],
+        correctAnswer: "Nitrogen"
+      },
+      {
+        question: "What is the primary cause of deforestation?",
+        options: ["Logging", "Urbanization", "Wildfires", "Climate Change"],
+        correctAnswer: "Logging"
+      },
+      {
+        question: "Which renewable energy source harnesses the power of the sun?",
+        options: ["Wind Energy", "Solar Energy", "Hydropower", "Geothermal Energy"],
+        correctAnswer: "Solar Energy"
+      },
+      {
+        question: "What is the ozone layer primarily responsible for preventing?",
+        options: ["Greenhouse Gas Emissions", "Air Pollution", "UV Radiation", "Smog Formation"],
+        correctAnswer: "UV Radiation"
+      },
+      {
+        question: "Which gas is a major contributor to the greenhouse effect?",
+        options: ["Oxygen", "Carbon Dioxide", "Nitrogen", "Methane"],
+        correctAnswer: "Carbon Dioxide"
+      },
+      {
+        question: "What is the term for the process of converting waste materials into reusable materials?",
+        options: ["Recycling", "Composting", "Incineration", "Landfilling"],
+        correctAnswer: "Recycling"
+      },
+      {
+        question: "Which of the following is a non-renewable energy source?",
+        options: ["Solar Power", "Natural Gas", "Wind Energy", "Hydropower"],
+        correctAnswer: "Natural Gas"
+      },
+      {
+        question: "What is the main cause of coral bleaching in coral reefs?",
+        options: ["Ocean Acidification", "Overfishing", "Oil Spills", "High Temperatures"],
+        correctAnswer: "High Temperatures"
+      },
+      {
+        question: "Which environmental issue is associated with the thinning of the ozone layer?",
+        options: ["Global Warming", "Acid Rain", "Ozone Depletion", "Deforestation"],
+        correctAnswer: "Ozone Depletion"
+      },
+      {
+        question: "What is the largest source of marine pollution?",
+        options: ["Plastic Waste", "Oil Spills", "Industrial Runoff", "Sewage Disposal"],
+        correctAnswer: "Plastic Waste"
+      },
+      {
+        question: "Which gas is released during the combustion of fossil fuels?",
+        options: ["Oxygen", "Carbon Monoxide", "Hydrogen", "Methane"],
+        correctAnswer: "Carbon Monoxide"
+      },
+      {
+        question: "What is the primary cause of soil erosion?",
+        options: ["Deforestation", "Overgrazing", "Mining", "Industrial Pollution"],
+        correctAnswer: "Deforestation"
+      },
+      {
+        question: "Which natural disaster is often intensified by climate change?",
+        options: ["Earthquakes", "Tornadoes", "Hurricanes", "Floods"],
+        correctAnswer: "Hurricanes"
+      },
+      {
+        question: "What is the term for the gradual increase in the Earth's average temperature?",
+        options: ["Global Warming", "Climate Change", "Greenhouse Effect", "Ice Age"],
+        correctAnswer: "Global Warming"
+      },
+      {
+        question: "Which material is biodegradable and helps enrich soil when decomposed?",
+        options: ["Plastic", "Aluminum", "Glass", "Organic Matter"],
+        correctAnswer: "Organic Matter"
+      },
+      {
+        question: "What is the main source of indoor air pollution in households using solid fuels for cooking?",
+        options: ["Cigarette Smoke", "Pesticides", "Radon Gas", "Biomass Burning"],
+        correctAnswer: "Biomass Burning"
+      },
+      {
+        question: "What is the primary cause of the hole in the Antarctic ozone layer?",
+        options: ["Aerosol Propellants", "Deforestation", "Chlorofluorocarbons (CFCs)", "Methane Emissions"],
+        correctAnswer: "Chlorofluorocarbons (CFCs)"
+      },
+      {
+        question: "Which environmental problem is associated with the loss of biodiversity?",
+        options: ["Air Pollution", "Water Scarcity", "Deforestation", "Eutrophication"],
+        correctAnswer: "Deforestation"
+      },
+      {
+        question: "What is the term for the practice of planting trees to restore or create forests?",
+        options: ["Afforestation", "Reforestation", "Deforestation", "Desertification"],
+        correctAnswer: "Reforestation"
+      },
+      {
+        question: "Which of the following is a renewable source of freshwater?",
+        options: ["Icebergs", "Groundwater", "Saltwater", "Glaciers"],
+        correctAnswer: "Groundwater"
+      },
+      {
+        question: "What is the primary component of smog in urban areas?",
+        options: ["Carbon Monoxide", "Sulfur Dioxide", "Ozone", "Particulate Matter"],
+        correctAnswer: "Ozone"
+      },
+      {
+        question: "What is the main greenhouse gas emitted from landfills?",
+        options: ["Carbon Dioxide", "Methane", "Nitrous Oxide", "Water Vapor"],
+        correctAnswer: "Methane"
+      },
+      {
+        question: "Which of the following is a major cause of coral reef destruction?",
+        options: ["Ocean acidification", "Deforestation", "Air pollution", "Oil spills"],
+        correctAnswer: "Oil spills"
+      },
+      {
+        question: "What is the largest ocean on Earth?",
+        options: ["Atlantic Ocean", "Indian Ocean", "Southern Ocean", "Pacific Ocean"],
+        correctAnswer: "Pacific Ocean"
+      },
+      {
+        question: "Which gas makes up the majority of Earth's atmosphere?",
+        options: ["Oxygen", "Carbon Dioxide", "Nitrogen", "Hydrogen"],
+        correctAnswer: "Nitrogen"
+      },
+      // (Your existing questions here)
+    ];
+
+    let questionsSubset = [];
+    let currentQuestionIndex = 0;
+    let score = 0;
+    let startTime;
+    let endTime;
+    let userAnswers = new Array(10).fill(null);
+
+    let timer;
+    const timerElement = document.getElementById("timer");
+
+    function startTimer(duration) {
+      // (Your existing timer code)
+let timeLeft = duration;
+      timer = setInterval(function () {
+        const minutes = Math.floor(timeLeft / 60);
+        const seconds = timeLeft % 60;
+
+        timerElement.textContent = `${minutes}:${seconds}`;
+
+        if (timeLeft <= 0) {
+          clearInterval(timer);
+          showScore();
+        }
+
+        timeLeft--;
+      }, 1000);
+    }
+    function startQuiz() {
+      const instructionsContainer = document.getElementById("instructions-container");
+      const quizContainer = document.getElementById("quiz-container");
+      const quizDuration = 300; // 5 minutes in seconds
+
+      instructionsContainer.style.display = "none";
+      quizContainer.style.display = "block";
+      loadQuestion();
+      startTimer(quizDuration);
+    }
+
+    function stopTimer() {
+      clearInterval(timer);
+    }
+
+    function resetQuiz() {
+      const resultContainer = document.getElementById("result-container");
+      const instructionsContainer = document.getElementById("instructions-container");
+      const quizContainer = document.getElementById("quiz-container");
+
+      resultContainer.style.display = "none";
+      instructionsContainer.style.display = "block";
+      quizContainer.style.display = "none";
+
+      // Select a subset of 10 random questions
+      questionsSubset = questions.slice(0, 10);
+      shuffleArray(questionsSubset);
+
+      currentQuestionIndex = 0;
+      score = 0;
+      startTime = null;
+      endTime = null;
+      userAnswers = new Array(10).fill(null);
+    }
+
+    function loadQuestion() {
+      const currentQuestion = questionsSubset[currentQuestionIndex];
+      const questionElement = document.getElementById("question");
+      const optionsContainer = document.getElementById("options-container");
+      const prevButton = document.getElementById("prev-btn");
+      const resetButton = document.getElementById("reset-btn");
+      const nextButton = document.getElementById("next-btn");
+      const scoreButton = document.getElementById("score-btn");
+
+      questionElement.textContent = currentQuestion.question;
+      optionsContainer.innerHTML = "";
+
+      currentQuestion.options.forEach((option, index) => {
+        const button = document.createElement("button");
+        button.textContent = option;
+        button.onclick = () => selectOption(index);
+        optionsContainer.appendChild(button);
+      });
+
+      highlightSelectedOption();
+      startTime = new Date();
+
+      // Update button visibility
+      prevButton.style.display = currentQuestionIndex > 0 ? "inline-block" : "none";
+      resetButton.style.display = "inline-block";
+      nextButton.style.display = currentQuestionIndex < 9 ? "inline-block" : "none"; // Updated to display 10 questions
+      scoreButton.style.display = currentQuestionIndex === 9 ? "inline-block" : "none"; // Updated to display 10 questions
+    }
+
+    function selectOption(selectedIndex) {
+      userAnswers[currentQuestionIndex] = selectedIndex;
+      highlightSelectedOption();
+    }
+
+    function highlightSelectedOption() {
+      const buttons = document.querySelectorAll("#options-container button");
+      buttons.forEach((button, index) => {
+        button.classList.remove("selected");
+        if (index === userAnswers[currentQuestionIndex]) {
+          button.classList.add("selected");
+        }
+      });
+    }
+
+    function previousQuestion() {
+      if (currentQuestionIndex > 0) {
+        currentQuestionIndex--;
+        loadQuestion();
+      }
+    }
+
+    function resetAnswer() {
+      userAnswers[currentQuestionIndex] = null;
+      loadQuestion();
+    }
+
+    function showScore() {
+      const resultContainer = document.getElementById("result-container");
+      const resultStats = document.getElementById("result-stats");
+      const scoreChart = document.getElementById("score-pie-chart");
+
+      resultContainer.style.display = "block";
+
+      endTime = new Date();
+      calculateScore();
+
+      const durationInSeconds = (endTime - startTime) / 1000;
+      resultStats.textContent = `You completed the quiz in ${durationInSeconds.toFixed(2)} seconds. Your score is ${score} out of 10.`;
+
+      const ctx = scoreChart.getContext('2d');
+      new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+          labels: ['Correct', 'Incorrect'],
+          datasets: [{
+            data: [score, 10 - score], // Updated to match the subset size
+            backgroundColor: ['#2ecc71', '#e74c3c'],
+            borderColor: ['#2ecc71', '#e74c3c'],
+            borderWidth: 1
+          }]
+        }
+      });
+
+      stopTimer();
+    }
+
+    function nextQuestion() {
+      if (currentQuestionIndex < 9) { // Updated to display 10 questions
+        currentQuestionIndex++;
+        loadQuestion();
+      } else {
+        showScore();
+      }
+    }
+
+    function calculateScore() {
+      score = 0;
+      for (let i = 0; i < 10; i++) { // Updated to match the subset size
+        if (userAnswers[i] === questionsSubset[i].options.indexOf(questionsSubset[i].correctAnswer)) {
+          score++;
+        }
+      }
+    }
+
+    function shuffleArray(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+    }
+
+    // Initial display setup
+    resetQuiz();
+  </script>
+
+</body>
+</html>
