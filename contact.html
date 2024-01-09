@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact Support</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      background-color: #f4f4f4;
+      color: #333;
+      transition: background-color 0.5s ease;
+    }
+
+    header {
+      background-color: #3498db;
+      color: #ecf0f1;
+      padding: 1em;
+      text-align: center;
+    }
+
+    main {
+      display: flex;
+      justify-content: space-around;
+      align-items: flex-start;
+      padding: 20px;
+      gap: 20px;
+    }
+
+    section {
+      flex: 1;
+      background-color: #e9dee3;
+      border-radius: 10px;
+      overflow: hidden;
+      transition: transform 0.5s ease, box-shadow 0.5s ease;
+    }
+
+    section:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+      color: #e7a6f3;
+    }
+
+    .contact-details {
+      padding: 20px;
+    }
+
+    .person {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .person img {
+      border-radius: 50%;
+      margin-right: 15px;
+      width: 50px;
+      height: 50px;
+      object-fit: cover;
+    }
+
+    .contact-icon {
+      font-size: 24px;
+      margin-right: 8px;
+    }
+
+    footer {
+      text-align: center;
+      padding: 1em;
+      background-color: #3498db;
+      color: #ecf0f1;
+    }
+
+    .faq {
+      background-color: #f9f9f9;
+      padding: 20px;
+      margin-top: 20px;
+      border-radius: 10px;
+    }
+
+    .feedback-form {
+      background-color: #f9f9f9;
+      padding: 20px;
+      margin-top: 20px;
+      border-radius: 10px;
+    }
+
+    .security-info {
+      background-color: #f9f9f9;
+      padding: 20px;
+      margin-top: 20px;
+      border-radius: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Contact Support</h1>
+  </header>
+
+  <main>
+    <section id="technical-support">
+      <h2>Technical Support</h2>
+
+      <div class="person">
+        <img src="https://s3.amazonaws.com/cbrig-assets/csoethp/resources/Student/S124bV4N.JPG" alt="Aayush Kaushal">
+        <div class="contact-details">
+          <p>Name: Aayush Kaushal</p>
+          <p>
+            <span class="contact-icon">&#9742;</span> Mobile: <span id="tech-support-phone"></span>
+          </p>
+          <p>
+            <span class="contact-icon">&#9993;</span> Email:
+            <a href="mailto:kaushalaayush2004@gmail.com">kaushalaayush2004@gmail.com</a>
+          </p>
+        </div>
+      </div>
+
+      <div class="person">
+        <img src="https://s3.amazonaws.com/cbrig-assets/csoethp/resources/Student/S125n8ee.JPG" alt="Aazim Azad">
+        <div class="contact-details">
+          <p>Name: Aazim Azad</p>
+          <p>
+            <span class="contact-icon">&#9742;</span> Mobile: <span id="tech-support-phone2"></span>
+          </p>
+          <p>
+            <span class="contact-icon">&#9993;</span> Email:
+            <a href="mailto:naikaazim123@gmail.com">naikaazim123@gmail.com</a>
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section id="content-creation">
+      <h2>Content Creation Support</h2>
+
+      <div class="person">
+        <img src="aaditya_photo.jpg" alt="Aaditya Goel">
+        <div class="contact-details">
+          <p>Name: Aaditya Goel</p>
+          <p>
+            <span class="contact-icon">&#9742;</span> Mobile: <span id="content-creation-phone"></span>
+          </p>
+          <p>
+            <span class="contact-icon">&#9993;</span> Email:
+            <a href="mailto:aadityagoel1235@gmail.com">aadityagoel1235@gmail.com</a>
+          </p>
+        </div>
+      </div>
+
+      <div class="person">
+        <img src="aditya_photo.jpg" alt="Aditya Puri">
+        <div class="contact-details">
+          <p>Name: Aditya Puri</p>
+          <p>
+            <span class="contact-icon">&#9742;</span> Mobile: <span id="content-creation-phone2"></span>
+          </p>
+          <p>
+            <span class="contact-icon">&#9993;</span> Email:
+            <a href="mailto:adityapuri11@gmail.com">adityapuri11@gmail.com</a>
+          </p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <section class="faq">
+    <h2>FAQ</h2>
+    <!-- Add your FAQ content here -->
+  </section>
+
+  <section class="feedback-form">
+    <h2>Feedback Form</h2>
+    <!-- Add your feedback form content here -->
+    <p>
+        <a href="feedback-form.html">Click here</a> to provide your feedback.
+    </p>
+  </section>
+
+  <section class="security-info">
+    <h2>Security and Privacy Information</h2>
+    <!-- Add your security and privacy information here -->
+  </section>
+
+  <footer>
+    <p>&copy; 2024 Contact Support</p>
+  </footer>
+
+  <script>
+    function isWorkingHours() {
+      const now = new Date();
+      const hours = now.getHours();
+      return hours >= 9 && hours < 17;
+    }
+
+    function updatePhoneNumber() {
+      const techSupportPhoneElement = document.getElementById('tech-support-phone');
+      const techSupportPhoneElement2 = document.getElementById('tech-support-phone2');
+      const contentCreationPhoneElement = document.getElementById('content-creation-phone');
+      const contentCreationPhoneElement2 = document.getElementById('content-creation-phone2');
+
+      if (isWorkingHours()) {
+        techSupportPhoneElement.textContent = '8580465736';
+        techSupportPhoneElement2.textContent = '8492992212';
+        contentCreationPhoneElement.textContent = '8533091730';
+        contentCreationPhoneElement2.textContent = '7087211258';
+      } else {
+        techSupportPhoneElement.textContent = 'Phone only accessible between working hours (9 am to 5 pm)';
+        techSupportPhoneElement2.textContent = 'Phone only accessible between working hours (9 am to 5 pm)';
+        contentCreationPhoneElement.textContent = 'Phone only accessible between working hours (9 am to 5 pm)';
+        contentCreationPhoneElement2.textContent = 'Phone only accessible between working hours (9 am to 5 pm)';
+      }
+    }
+
+    updatePhoneNumber();
+    setInterval(updatePhoneNumber, 60000);
+  </script>
+
+</body>
+</html>
