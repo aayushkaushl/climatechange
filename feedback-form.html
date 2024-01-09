@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Feedback Form</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      background-color: #f4f4f4;
+      color: #333;
+    }
+
+    header {
+      background-color: #3498db;
+      color: #ecf0f1;
+      padding: 1em;
+      text-align: center;
+    }
+
+    main {
+      max-width: 600px;
+      margin: 20px auto;
+      background-color: #ecf0f1;
+      border-radius: 10px;
+      padding: 20px;
+    }
+
+    h1, h2 {
+      color: #3498db;
+    }
+
+    form {
+      margin-top: 20px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 10px;
+    }
+
+    input,
+    textarea {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      box-sizing: border-box;
+    }
+
+    textarea {
+      resize: vertical;
+      height: 150px;
+    }
+
+    button {
+      background-color: #3498db;
+      color: #ecf0f1;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    /* Added CSS animations */
+    @keyframes fadeInOut {
+      0%, 100% {
+        opacity: 0;
+      }
+      50% {
+        opacity: 1;
+      }
+    }
+
+    @keyframes rotate {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .animated-text {
+      animation: fadeInOut 2s infinite;
+      font-size: 18px;
+      color: #3498db;
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .countdown {
+      font-size: 24px;
+      font-weight: bold;
+      margin-top: 10px;
+    }
+
+    .symbol {
+      font-size: 30px;
+      margin-right: 5px;
+      display: inline-block;
+      animation: rotate 2s infinite;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Feedback Form</h1>
+  </header>
+
+  <main>
+    <form id="feedbackForm" action="contact.html" method="post" onsubmit="return validateForm()">
+      <label for="name">Name:</label>
+      <input type="text" id="name" name="name" required>
+
+      <label for="email">Email:</label>
+      <input type="email" id="email" name="email" required>
+
+      <label for="feedback">Feedback (Minimum 10 words):</label>
+      <textarea id="feedback" name="feedback" required></textarea>
+
+      <button type="submit">Submit Feedback</button>
+    </form>
+  </main>
+
+  <script>
+    function validateForm() {
+      var name = document.getElementById('name').value;
+      var email = document.getElementById('email').value;
+      var feedback = document.getElementById('feedback').value;
+
+      
+      if (name.length < 2) {
+        alert('Please enter a valid name (at least 2 characters).');
+        return false;
+      }
+
+      
+      var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        alert('Please enter a valid email address.');
+        return false;
+      }
+
+      
+      var words = feedback.trim().split(/\s+/).filter(Boolean).length;
+      if (words < 10) {
+        alert('Please provide feedback with a minimum of 10 words.');
+        return false;
+      }
+
+      // for backend backend process (e.g., send feedback to server)
+      
+      var counter = 7;
+      var successPopup = window.confirm('Feedback submitted successfully! Redirecting you to the support page.\n\nThank you for your feedback!\n\nYou will be redirected in ' + counter + ' seconds.');
+
+      if (successPopup) {
+        
+        var countdownDiv = document.createElement('div');
+        countdownDiv.className = 'animated-text';
+        countdownDiv.innerHTML = '<span class="symbol">&#x27F3;</span>Redirecting in <span class="countdown">' + counter + '</span> seconds...';
+        document.body.appendChild(countdownDiv);
+
+        
+        var countdownInterval = setInterval(function () {
+          counter--;
+          countdownDiv.innerHTML = '<span class="symbol">&#x27F3;</span>Redirecting in <span class="countdown">' + counter + '</span> seconds...';
+
+          
+          if (counter === 0) {
+            clearInterval(countdownInterval);
+            window.location.href = 'contact.html';
+          }
+        }, 1000);
+      }
+
+      
+      return false;
+    }
+  </script>
+
+</body>
+</html>
