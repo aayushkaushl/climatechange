@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Impact of Climate Change</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-size: cover;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            overflow-x: hidden;
+        }
+
+        #user-container {
+            position: absolute;
+            top: 0;
+            right: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            margin: 20px;
+        }
+
+        #welcome-message {
+            text-align: center;
+            font-size: 1em;
+            margin: 20px;
+            white-space: nowrap;
+            overflow: hidden;
+            animation: typewriter 6s steps(40) forwards;
+        }
+
+        @keyframes typewriter {
+            from {
+                width: 0;
+            }
+            to {
+                width: 100%;
+            }
+        }
+
+        #climate-container {
+            max-width: 600px;
+            background-color: #19121241;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            margin-top: 20px;
+            margin-left: auto; /* Move to right */
+        }
+
+        .btn {
+            width: 80%;
+            margin-top: 10px;
+            background-color: #f01246;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background-color: #d88e0e;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="user-container">
+        <button id="user-profile" onclick="displayUserProfile()">User Profile</button>
+    </div>
+
+    <div id="welcome-message"></div>
+
+    <p>
+        Climate change refers to long-term changes in the average weather patterns that have come to define Earth's local,
+        regional, and global climates. These changes have a broad range of observed effects that are synonymous with the
+        term.
+        <br>
+
+    </p>
+
+    <div id="climate-container">
+        <h3>QUICK BUTTONS</h3>
+        <button class="btn" onclick="diversity()">Temperature Rise</button>
+        <button class="btn" onclick="diversity()">Sea Level Rise</button>
+        <button class="btn" onclick="diversity()">Extreme Weather Events</button>
+        <button class="btn" onclick="diversity()">Biodiversity Loss</button>
+        <button class="btn" onclick="navigateToAirQualityPage()">Check Air Quality</button>
+        <button class="btn" onclick="goals()">Sustainable Development Goals</button>
+        <button class="btn" onclick="contact()">Contact Support</button>
+        <button class="btn" onclick="game()">Play a Quiz</button>
+    </div>
+
+    <script src="home.js"></script>
+</body>
+
+</html>
