@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Impact of Climate Change</title>
+    <title>Login to Explore the Impact of Climate Change</title>
     <link rel="stylesheet" href="styles.css">
     <style>
         body {
@@ -14,13 +14,15 @@
             background: url('https://img.freepik.com/free-photo/wet-monstera-deliciosa-plant-leaves-garden_53876-139814.jpg');
             background-size: cover;
         }
-          h2{
+
+        h2 {
             color: black;
-          }
+        }
+
         .container {
             max-width: 600px;
             margin: 50px auto;
-            background-color: #e72b2b41;
+            background-color: #2217ef41;
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -29,7 +31,6 @@
         label {
             display: block;
             margin-bottom: 5px;
-            font: red;
         }
 
         input {
@@ -56,18 +57,6 @@
             margin-top: 15px;
         }
 
-        #climate-container {
-            display: none;
-        }
-
-        #user-profile {
-            cursor: pointer;
-            color:red;
-            background-color:blue;
-            position:absolute;
-            width:140px;
-        }
-
         #otp-popup {
             display: none;
             position: fixed;
@@ -88,56 +77,19 @@
             display: block;
             opacity: 1;
         }
+
         #loading-message {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: #595155;
-    color: #efe2e2;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
-    z-index: 1000;
-}
-        .container {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-}
-
-#climate-container .btn {
-    width: 80%; /* Make buttons take full width */
-    margin-top: 10px; /* Adjust margin between buttons */
-}
-
-.container {
-    max-width: 600px;
-    margin: 50px 0 50px auto; /* Adjust margin to position the container */
-    background-color: #e72b2b41;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-@media only screen and (max-width: 767px) {
-    .container {
-        margin: 20px auto;
-    }
-}
-
-/* Tablets */
-@media only screen and (min-width: 768px) and (max-width: 1023px) {
-    .container {
-        margin: 30px auto;
-    }
-}
-
-/* Laptops and desktops */
-@media only screen and (min-width: 1024px) {
-    .container {
-        margin: 50px auto;
-    }
-}
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #595155;
+            color: #efe2e2;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+        }
     </style>
 </head>
 
@@ -147,191 +99,32 @@
         <h2>Login to Explore the Impact of Climate Change</h2>
         <form id="login-form">
             <label for="name">Name:</label>
-            <input type="text" id="name" required>
+            <input type="text" id="name" pattern="[a-zA-Z ]{4,}" title="Enter a valid name (minimum 4 characters)" required>
 
             <label for="email">Email:</label>
             <input type="email" id="email" required>
 
             <label for="mobile">Mobile Number:</label>
-            <input type="tel" id="mobile" pattern="[6789]\d{9}" required>
+            <input type="tel" id="mobile" pattern="[6789]\d{9}" title="Enter a valid 10-digit mobile number starting with 6, 7, 8, or 9" required>
 
             <button type="button" onclick="generateOTP()">Generate OTP</button>
 
             <label for="otp">Enter OTP:</label>
             <input type="text" id="otp" required>
 
-            
-            <div class="g-recaptcha" data-sitekey="6LeXlkopAAAAAN8kYA9qOH69K8uM2cHiMUdtVdai"></div>
+            <div class="g-recaptcha" data-sitekey="6LfK2UIpAAAAAKYOB9aCun2U6KEt_Xx6ChMUTZiS"></div>
 
             <button type="button" onclick="validateOTP()">Login</button>
         </form>
     </div>
 
-    <div id="climate-container" class="container">
-        <div id="user-profile" onclick="displayUserProfile()">
-            <span id="user-name-display">User Profile</span> ▼
-        </div>
-
-        <h2>Impact of Climate Change</h2>
-        <p>Explore the various aspects of climate change:</p>
-        <button class="btn">Temperature Rise</button>
-        <button class="btn">Sea Level Rise</button>
-        <button class="btn">Extreme Weather Events</button>
-        <button class="btn" onclick="diversity()">Biodiversity Loss</button>
-        <button class="btn" onclick="navigateToAirQualityPage()">Check Air Quality</button>
-        <button class="btn" onclick="goals()">Sustainable Development Goals</button>
-        <button class="btn" onclick="contact()">contact support</button>
-        <button class="btn" onclick="game()">play a quiz</button>
-    </div>
-
-    
     <div id="otp-popup"></div>
 
-    <script>
-        let otpPasskey;
-        let userName;
-        let userEmail;
-        let userMobile;
-
-        function generateOTP() {
-            const nameInput = document.getElementById("name");
-            const emailInput = document.getElementById("email");
-
-            const name = nameInput.value.trim();
-            const email = emailInput.value.trim();
-
-            if (name.length >= 4 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-                const mobileInput = document.getElementById("mobile");
-                const mobileNumber = mobileInput.value;
-
-                if (/^[6789]\d{9}$/.test(mobileNumber)) {
-                    otpPasskey = Math.floor(100000 + Math.random() * 900000);
-
-                    const otpPopup = document.getElementById("otp-popup");
-                    otpPopup.innerText = "OTP Passkey: " + otpPasskey;
-                    otpPopup.classList.add("active");
-                    setTimeout(() => {
-                        otpPopup.classList.remove("active");
-                        clearSensitiveData();
-                    }, 15000);
-                } else {
-                    alert("Please enter a valid mobile number.");
-                }
-            } else {
-                alert("Please enter a valid name and a valid email.");
-            }
-        }
-
-        function validateOTP() {
-    const enteredOTP = document.getElementById("otp").value;
-
-    const recaptchaResponse = grecaptcha.getResponse();
-    if (!recaptchaResponse) {
-        alert("Please complete the reCAPTCHA verification.");
-        return;
-    }
-
-    if (localStorage.getItem('usedOTP') === enteredOTP) {
-        alert("This OTP has already been used. Please generate a new OTP.");
-        return;
-    }
-
-    if (parseInt(enteredOTP) === otpPasskey) {
-        localStorage.setItem('usedOTP', enteredOTP);
-        localStorage.setItem('loggedIn', 'true');
-        localStorage.setItem('userName', document.getElementById("name").value);
-        localStorage.setItem('userEmail', document.getElementById("email").value);
-        localStorage.setItem('userMobile', document.getElementById("mobile").value);
-
-        // Show Loading Message
-        showLoadingMessage();
-
-        // Set a delay of 5 seconds before entering the homepage
-        setTimeout(() => {
-            // Hide Loading Message
-            hideLoadingMessage();
-
-            document.getElementById("login-container").style.display = "none";
-            document.getElementById("climate-container").style.display = "block";
-            document.getElementById("user-profile").style.display = "block";
-
-            userName = localStorage.getItem('userName');
-            document.getElementById("user-name-display").innerText = "User Profile";
-
-            // Hide OTP Popup
-            document.getElementById("otp-popup").classList.remove("active");
-        }, 5000);
-    } else {
-        alert("Invalid OTP. Please try again.");
-    }
-}
-
-function showLoadingMessage() {
-    const loadingMessage = document.createElement("div");
-    loadingMessage.id = "loading-message";
-    loadingMessage.innerText = "Reading data and logging you in...";
-    document.body.appendChild(loadingMessage);
-}
-
-function hideLoadingMessage() {
-    const loadingMessage = document.getElementById("loading-message");
-    if (loadingMessage) {
-        loadingMessage.parentNode.removeChild(loadingMessage);
-    }
-}
-
-
-
-        function displayUserProfile() {
-            window.location.href = 'profile.html';
-        }
-
-        function navigateToAirQualityPage() {
-            window.location.href = 'weather.html';
-        }
-         function diversity(){
-            window.location.href="diversity.html";
-         }
-         function contact(){
-            window.location.href="contact.html";
-         }
-         function game(){
-            window.location.href="game.html";
-         }
-        function goals() {
-            window.location.href = "goals.html";
-        }
-          
-
-        function checkLoginStatus() {
-            const isLoggedIn = localStorage.getItem('loggedIn');
-
-            if (isLoggedIn) {
-                document.getElementById("login-container").style.display = "none";
-                document.getElementById("climate-container").style.display = "block";
-                document.getElementById("user-profile").style.display = "block";
-
-                userName = localStorage.getItem('userName');
-                userEmail = localStorage.getItem('userEmail');
-                userMobile = localStorage.getItem('userMobile');
-            } else {
-                document.getElementById("login-container").style.display = "block";
-                document.getElementById("climate-container").style.display = "none";
-                document.getElementById("user-profile").style.display = "none";
-            }
-        }
-
-        function clearSensitiveData() {
-            document.getElementById("otp").value = "";
-            otpPasskey = undefined;
-        }
-
-        checkLoginStatus();
-    </script>
-
-    <!-- Add this script at the end of your HTML body tag or in a separate JS file -->
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <script src="login.js"></script>
 
+    <!-- Add the loading message script -->
+   
 </body>
 
 </html>
