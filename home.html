@@ -260,6 +260,184 @@ body::before {
     height:50px;
     width:50px;
       }
+      @media (max-width: 600px) {
+            /* Adjust styles for devices with screen width up to 600px */
+            .header-content {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        /* Header Styles */
+        header {
+            background-color: transparent;
+            color: skyblue;
+            text-align: center;
+            padding: 1em;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header-content {
+            font-size: 4vw; /* Responsive font size */
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .header-content img {
+            vertical-align: middle;
+            border-radius: 50%;
+            width: 10vw; /* Responsive image size */
+            height: 10vw;
+            margin-right: 2vw;
+        }
+
+        header h1 {
+            margin: 0;
+            padding: 0;
+        }
+
+        header h6 {
+            margin: -2vw; /* Adjust as needed */
+            padding-bottom: 2vw;
+            padding-left: 5vw; /* Adjust as needed */
+            padding-top: -1vw; /* Adjust as needed */
+        }
+
+        /* Navigation Styles */
+        nav {
+            display: flex;
+            justify-content: space-around;
+            background-color: transparent;
+            padding: 1vw;
+            flex-wrap: wrap;
+            position: relative;
+            z-index: 1;
+        }
+
+        nav a {
+            font-size: 1.5vw; /* Responsive font size */
+            margin: 1vw;
+        }
+
+        /* Section Styles */
+        section {
+            padding: 2vw;
+        }
+
+        /* Footer Styles */
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 2vw;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+
+        /* Button Styles */
+        .btn-3d {
+            font-size: 2vw; /* Responsive font size */
+            padding: 1vw 2vw; /* Responsive padding */
+        }
+
+        /* Weather Container Styles */
+        .weather-container {
+            position: relative;
+            top: 5vw; /* Adjust as needed */
+            float: right;
+            margin-right: 2vw;
+            border: 0.5vw solid rgb(18, 18, 18);
+            justify-content: center;
+            padding: 2vw;
+        }
+
+        #weather-icon {
+            float: right;
+            height: 3vw; /* Responsive size */
+            width: 3vw; /* Responsive size */
+        }
+
+        /* Responsive Background Video Styles */
+        iframe {
+            width: 100vw;
+            height: 56.25vw; /* 16:9 aspect ratio */
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: -1;
+        }
+
+        /* Responsive Welcome Section Styles */
+        #welcome h1 {
+            font-size: 3vw; /* Responsive font size */
+        }
+
+        /* Responsive Discover Features Section Styles */
+        #discover h1 {
+            font-size: 3vw; /* Responsive font size */
+        }
+
+        /* Responsive Choose Section Styles */
+        #choose h2 {
+            font-size: 2.5vw; /* Responsive font size */
+        }
+
+        /* Responsive Feature List Styles */
+        .feature {
+            font-weight: 200;
+            text-decoration: underline;
+        }
+
+        /* Responsive Social Media Links Styles */
+        .logo img {
+            width: 3vw; /* Responsive image size */
+            height: 3vw;
+        }
+
+        /* Responsive User Profile Link Styles */
+        nav a:last-child {
+            font-size: 1.5vw; /* Responsive font size */
+            margin-right: 2vw;
+        }
+
+        /* Media Queries */
+        @media (max-width: 600px) {
+            /* Adjust styles for devices with screen width up to 600px */
+            .header-content {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .header-content img {
+                margin-bottom: 1vw;
+            }
+
+            header h6 {
+                padding-left: 0;
+                text-align: center;
+            }
+
+            nav {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            nav a {
+                margin: 1vw 0;
+            }
+
+            .weather-container {
+                float: none;
+                margin: 2vw auto;
+            }
+        }
+        
     </style>
 </head>
 
@@ -528,9 +706,10 @@ body::before {
 
             fetchWeatherData();
         });
+
     </script>
 <!-- Code injected by live-server -->
-
+ 
 </body>
 
 </html>
